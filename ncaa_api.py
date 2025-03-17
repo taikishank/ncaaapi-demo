@@ -6,7 +6,7 @@ from fastapi import FastAPI, HTTPException
 BASE_URL = "https://api.sportsdata.io/v3/cbb/scores/json"
 
 async def fetch_roster(team_id: str):
-    API_KEY="828a039bc45c4450b89be0f13aefbb4e" # bad practice
+    API_KEY="api-key-placeholder" # bad practice
     
     if not API_KEY:
         raise HTTPException(status_code=500, detail="NO API KEY PROVIDED")
