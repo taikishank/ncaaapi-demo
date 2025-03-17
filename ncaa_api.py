@@ -3,8 +3,6 @@ import httpx
 #from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 
-
-# API_KEY = os.getenv("API_KEY")
 BASE_URL = "https://api.sportsdata.io/v3/cbb/scores/json"
 
 async def fetch_roster(team_id: str):
@@ -25,7 +23,7 @@ async def fetch_roster(team_id: str):
     return response.json()
 
 async def fetch_team_logs(season: str, team_id: int, numberofgames: str):
-    API_KEY="828a039bc45c4450b89be0f13aefbb4e" # bad practice
+    API_KEY="api-key-placeholder" # bad practice
     
     if not API_KEY:
         raise HTTPException(status_code=500, detail="NO API KEY PROVIDED")
@@ -42,7 +40,7 @@ async def fetch_team_logs(season: str, team_id: int, numberofgames: str):
     return response.json()
     
 async def fetch_player_logs_season(season: str, player_id: int):
-    API_KEY="828a039bc45c4450b89be0f13aefbb4e" # bad practice
+    API_KEY="api-key-placeholder" # bad practice
     
     if not API_KEY:
         raise HTTPException(status_code=500, detail="NO API KEY PROVIDED")
@@ -60,7 +58,7 @@ async def fetch_player_logs_season(season: str, player_id: int):
 
 
 async def fetch_all_player_logs_season(season: str):
-    API_KEY="828a039bc45c4450b89be0f13aefbb4e" # bad practice
+    API_KEY="api-key-placeholder" # bad practice
     
     if not API_KEY:
         raise HTTPException(status_code=500, detail="NO API KEY PROVIDED")

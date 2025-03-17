@@ -4,7 +4,7 @@ from ncaa_api import *
 
 app = FastAPI()
 
-API_KEY = "828a039bc45c4450b89be0f13aefbb4e"
+API_KEY = "api-key-placeholder"
 BASE_URL = "https://api.sportsdata.io/v3/cbb/scores/json"
     
 # return all active players
