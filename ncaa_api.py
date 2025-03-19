@@ -19,11 +19,17 @@ async def fetch_roster(team_id: str):
 
     headers = {"Ocp-Apim-Subscription-Key": API_KEY}
     url = f"{BASE_URL}/PlayersBasic/{team_id}"
+    
+    logging.info(f"Fetching roster for team: {team_id}")
+    logging.info(f"Request url: {url}")
 
     async with httpx.AsyncClient() as client:
         response = await client.get(url, headers=headers)
+        
+    logging.info(f"Response status: {response.status_code}")
 
     if response.status_code != 200:
+        logging.error(f"Error response: {response.text}")
         raise HTTPException(status_code=response.status_code, detail=response.text)
 
     return response.json()
