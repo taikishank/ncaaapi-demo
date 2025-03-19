@@ -41,4 +41,25 @@ async def get_player_logs_season(season: str="2024"):
 @app.get("/roster/ucla/player/ids")
 async def fetch_ucla_player_ids():
     roster_data = await fetch_roster("ucla")
+<<<<<<< Updated upstream
     return get_player_ids(roster_data)
+=======
+    return get_player_ids(roster_data)
+
+# returns JSON response containing all UCLA player logs for the season
+# calls on above function to retrieve all player ids, then fetches each players' season data
+@app.get("/sample/team")
+async def fetch_ucla_player_logs():
+    roster_data = await fetch_ucla_player_ids()
+    return await fetch_team_player_logs("2025", roster_data)
+
+@app.get("player/ids/{team}")
+async def fetch_player_ids(team: str):
+    roster_data = await fetch_roster(team)
+    return get_player_ids(roster_data)
+
+@app.get("/playerlogs/{team}")
+async def fetch_player_logs(team: str):
+    roster_data = await fetch_player_ids(team)
+    return await fetch_team_player_logs("2025", roster_data)
+>>>>>>> Stashed changes
