@@ -45,7 +45,7 @@ async def fetch_ucla_player_logs():
     roster_data = await fetch_ucla_player_ids()
     return await fetch_team_player_logs("2025", roster_data)
 
-@app.get("player/ids/{team}")
+@app.get("/player/ids/{team}")
 async def fetch_player_ids(team: str):
     roster_data = await fetch_roster(team)
     return get_player_ids(roster_data)
