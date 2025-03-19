@@ -54,3 +54,8 @@ async def fetch_player_ids(team: str):
 async def fetch_player_logs(team: str):
     roster_data = await fetch_player_ids(team)
     return await fetch_team_player_logs("2025", roster_data)
+
+# return TeamID, Key, and School name of every single NCAA team
+@app.get("/all/teams")
+async def get_all_teams():
+    return await fetch_all_teams()
