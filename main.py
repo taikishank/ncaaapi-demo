@@ -4,7 +4,7 @@ from ncaa_api import *
 
 app = FastAPI()
 
-API_KEY = "828a039bc45c4450b89be0f13aefbb4e"
+API_KEY = "api-key-placeholder"
 BASE_URL = "https://api.sportsdata.io/v3/cbb/scores/json"
     
 # return all active players
@@ -19,7 +19,6 @@ async def get_active_players():
 async def get_ucla():
     return await fetch_roster("ucla")
     
-# sample response for team_id=1 (ie SMU)
 @app.get("/logs/smu")
 async def get_team1_logs():
     return await fetch_team_logs("2025", 1, "all")
@@ -29,15 +28,11 @@ async def get_team1_logs():
 async def get_team_logs(team_id: int, season: str="2025", numberofgames: str="all"):
     return await fetch_team_logs(season, team_id, numberofgames)
 
-# testing function
-# @app.get("/player/stats/test")
-# async def get_player_logs_season(season: str="2025"):
-#     return await fetch_player_logs_season(season, player_id=60023623)
-######################
-
+@app.get("/player/stats/test")
+async def get_player_logs_season(season: str="2025"):
+    return await fetch_player_logs_season(season, player_id=60019865)
 
 #   solution for fetching all player ids from a single team
-#   fetch the roster of a specific team and return all of the player ids
 @app.get("/roster/ucla/player/ids")
 async def fetch_ucla_player_ids():
     roster_data = await fetch_roster("ucla")
@@ -49,3 +44,18 @@ async def fetch_ucla_player_ids():
 async def fetch_ucla_player_logs():
     roster_data = await fetch_ucla_player_ids()
     return await fetch_team_player_logs("2025", roster_data)
+
+@app.get("/player/ids/{team}")
+async def fetch_player_ids(team: str):
+    roster_data = await fetch_roster(team)
+    return get_player_ids(roster_data)
+
+@app.get("/playerlogs/{team}")
+async def fetch_player_logs(team: str):
+    roster_data = await fetch_player_ids(team)
+    return await fetch_team_player_logs("2025", roster_data)
+
+# return TeamID, Key, and School name of every single NCAA team
+@app.get("/all/teams")
+async def get_all_teams():
+    return await fetch_all_teams()

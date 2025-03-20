@@ -19,11 +19,17 @@ async def fetch_roster(team_id: str):
 
     headers = {"Ocp-Apim-Subscription-Key": API_KEY}
     url = f"{BASE_URL}/PlayersBasic/{team_id}"
+    
+    logging.info(f"Fetching roster for team: {team_id}")
+    logging.info(f"Request url: {url}")
 
     async with httpx.AsyncClient() as client:
         response = await client.get(url, headers=headers)
+        
+    logging.info(f"Response status: {response.status_code}")
 
     if response.status_code != 200:
+        logging.error(f"Error response: {response.text}")
         raise HTTPException(status_code=response.status_code, detail=response.text)
 
     return response.json()
@@ -79,3 +85,30 @@ async def fetch_team_player_logs(season: str, player_ids: list):
         tasks.append(fetch_player_logs_season(season="2025", player_id=player_id))
     player_logs = await asyncio.gather(*tasks, return_exceptions=True)
     return [log for log in player_logs if not isinstance(log, Exception)]
+
+async def fetch_all_teams():
+    if not API_KEY:
+        raise HTTPException(status_code=500, detail="NO API KEY PROVIDED")
+
+    headers = {"Ocp-Apim-Subscription-Key": API_KEY}
+    url = f"{BASE_URL}/TeamsBasic"
+    
+    try:
+        async with httpx.AsyncClient() as client:
+            response = await client.get(url, headers=headers)
+            response.raise_for_status()
+        teams_data = response.json()
+        filtered_teams = [
+            {
+                "TeamID": team.get("TeamID"),
+                "Key": team.get("Key"),
+                "School": team.get("School")
+            }
+            for team in teams_data
+        ]
+        
+        return filtered_teams
+    except httpx.HTTPStatusError as http_err:
+        raise HTTPException(status_code=response.status_code, detail=response.text)
+    except httpx.RequestError as req_err:
+        raise HTTPException(status_code=500, detail=f"Request failed: {str(req_err)}")
